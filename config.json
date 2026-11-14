@@ -1,0 +1,49 @@
+{
+  "repos": [
+    "CodenameCrew"
+  ],
+  "excludedRepos": [],
+  "officialRepos": [
+    "CodenameCrew/CodenameEngine"
+  ],
+  "branch": "",
+  "tracked": [
+    {
+      "name": "Windows Builds",
+      "emoji": "<:windows:1558167710003896400>"
+    },
+    {
+      "name": "Mac OS Builds",
+      "emoji": "<:macos:1558167662436294716>"
+    },
+    {
+      "name": "Linux Builds",
+      "emoji": "<:linux:1558167699421667429>"
+    }
+  ],
+  "pollSeconds": 5,
+  "allowedRoles": [
+    "1303428277867647059",
+    "537313120666910720"
+  ],
+  "noCommentGuilds": [
+    "860561967383445535"
+  ],
+  "channels": [
+    "1557383912710217898"
+  ],
+  "routes": {
+    "commits": [
+      "1356976181035143178"
+    ],
+    "officialPulls": [
+      "1356976181035143178"
+    ],
+    "unofficialPulls": [
+      "1303436224022970438"
+    ],
+    "comments": [
+      "1303436034561937418"
+    ]
+  }
+}
