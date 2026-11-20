@@ -35,7 +35,7 @@ function openPrThread(key, pr) {
     user: pr.user,
     action: 'opened a pull request',
     heading: `${ctx.repoName}/${pr.base.ref}`,
-    title: `Pull request #${pr.number}: ${pr.title}`,
+    title: `[PR #${pr.number}]: ${pr.title}`,
     url: pr.html_url,
     body: pr.body,
     footer: by(pr.user, 'opened', pr.created_at),
@@ -48,7 +48,7 @@ function prThreadChange(pr, prState) {
   const merged = prState === 'merged'
   const payload = buildCard({
     heading: `${ctx.repoName}/${pr.base.ref}`,
-    title: `Pull request #${pr.number} ${prState}`,
+    title: `[Pull request #${pr.number} ${prState}]`,
     url: pr.html_url,
     color: merged ? purple : red
   })
