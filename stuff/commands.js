@@ -3,6 +3,7 @@ import { config, allowedRoles, allChannels, saveConfig } from './config.js'
 import { ctx } from './ctx.js'
 import { gh } from './github.js'
 import { watched } from './poll.js'
+import { systemInfo } from './system.js'
 
 const kinds = {
   commits: 'Commits',
@@ -14,6 +15,7 @@ const kinds = {
 const channelOption = option => option.setName('channel').setDescription('Defaults to this channel').addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
 const typeOption = option => option.setName('type').setDescription('Only this kind of update, defaults to everything not sent elsewhere').addChoices(...Object.entries(kinds).map(([value, name]) => ({ name, value })))
 export const feedCommand = new SlashCommandBuilder().setName('feed').setDescription('Choose where GitHub updates are posted').addSubcommand(sub => sub.setName('add').setDescription('Post GitHub updates in a channel').addChannelOption(channelOption).addStringOption(typeOption)).addSubcommand(sub => sub.setName('remove').setDescription('Stop posting GitHub updates in a channel').addChannelOption(channelOption).addStringOption(typeOption)).addSubcommand(sub => sub.setName('list').setDescription('Show the channels that get GitHub updates'))
+export const systemInfoCommand = new SlashCommandBuilder().setName('systeminfo').setDescription('Show the host, its location and current usage')
 export const setupCommand = new SlashCommandBuilder().setName('setup').setDescription('Create forum tags for GitHub labels and threads for open pull requests')
 
 async function setup() {
@@ -79,17 +81,18 @@ function feed(interaction) {
 }
 
 export async function handleCommand(interaction) {
-  if (!interaction.isChatInputCommand() || !['feed', 'setup'].includes(interaction.commandName)) return
+  if (!interaction.isChatInputCommand() || !['feed', 'setup', 'systeminfo'].includes(interaction.commandName)) return
   if (!interaction.inCachedGuild() || !interaction.member.roles.cache.hasAny(...allowedRoles)) {
     return interaction.reply({ content: "You're not allowed to use this command.", flags: MessageFlags.Ephemeral })
   }
 
-  if (interaction.commandName === 'setup') {
+  const slow = { setup, systeminfo: systemInfo }[interaction.commandName]
+  if (slow) {
     await interaction.deferReply({ flags: MessageFlags.Ephemeral })
     try {
-      return await interaction.editReply(await setup())
+      return await interaction.editReply(await slow())
     } catch (err) {
-      return interaction.editReply(`Setup failed: ${err.message}`)
+      return interaction.editReply(`${interaction.commandName} failed: ${err.message}`)
     }
   }
 

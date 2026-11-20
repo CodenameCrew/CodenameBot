@@ -1,7 +1,11 @@
 {
-  "repos": ["CodenameCrew"],
+  "repos": [
+    "CodenameCrew"
+  ],
   "excludedRepos": [],
-  "officialRepos": ["CodenameCrew/CodenameEngine"],
+  "officialRepos": [
+    "CodenameCrew/CodenameEngine"
+  ],
   "branch": "",
   "tracked": [
     {
@@ -18,34 +22,108 @@
     }
   ],
   "pollSeconds": 5,
-  "allowedRoles": ["1572256855504322650", "1573417422546018499"],
-  "noCommentGuilds": ["860561967383445535"],
-  "channels": ["1557383912710217898"],
+  "allowedRoles": [
+    "1572256855504322650",
+    "1573417422546018499"
+  ],
+  "noCommentGuilds": [
+    "860561967383445535"
+  ],
+  "channels": [
+    "1557383912710217898"
+  ],
   "routes": {
-    "commits": ["1356976181035143178"],
-    "officialPulls": ["1356976181035143178"],
-    "unofficialPulls": ["1303436224022970438"],
-    "comments": ["1303436034561937418"]
+    "commits": [
+      "1356976181035143178"
+    ],
+    "officialPulls": [
+      "1356976181035143178"
+    ],
+    "unofficialPulls": [
+      "1303436224022970438"
+    ],
+    "comments": [
+      "1303436034561937418"
+    ]
   },
   "forums": {
     "Engine PR": {
       "channel": "1572598131982598366",
       "tags": {
-        "Accepted/Merged": "tagId",
-        "Rejected": "tagId"
+        "Accepted/Merged": "1573462695347228861",
+        "Rejected": "1573462695347228862"
+      },
+      "labels": {
+        "bug": "1573462695448019026",
+        "documentation": "1573462695448019027",
+        "duplicate": "1573462695448019028",
+        "enhancement": "1573462695448019029",
+        "good first issue": "1573462695448019030",
+        "help wanted": "1573462695448019031",
+        "invalid": "1573462695448019032",
+        "question": "1573462695448019033",
+        "wontfix": "1573462695448019034",
+        "accessibility": "1573462695448019035",
+        "dependencies": "1573462695510802503",
+        "javascript": "1573462695510802504",
+        "github_actions": "1573462695510802505",
+        "internal-merge": "1573462695510802506",
+        "status:accepted": "1573462695510802507",
+        "status:awaiting": "1573462695510802508"
       }
     },
     "Library-Fork PR": {
       "channel": "1572598206305665064",
       "tags": {
-        "Accepted/Merged": "tagId",
-        "Rejected": "tagId"
+        "Accepted/Merged": "1573462697641779210",
+        "Rejected": "1573462697641779211"
+      },
+      "labels": {
+        "bug": "1573462697641779212",
+        "documentation": "1573462697641779213",
+        "duplicate": "1573462697641779214",
+        "enhancement": "1573462697641779215",
+        "good first issue": "1573462697641779216",
+        "help wanted": "1573462697641779217",
+        "invalid": "1573462697641779218",
+        "question": "1573462697641779219",
+        "wontfix": "1573462697650028636",
+        "accessibility": "1573462697650028637",
+        "dependencies": "1573462697650028638",
+        "javascript": "1573462697650028639",
+        "github_actions": "1573462697650028640",
+        "internal-merge": "1573462697650028641",
+        "status:accepted": "1573462697650028642",
+        "status:awaiting": "1573462697650028643",
+        "status:duplicate": "1573462697650028644",
+        "status:invalid": "1573462697650028645"
       }
     },
     "Issues": {
       "channel": "1572599245025054720",
       "tags": {
-        "Closed": "tagId"
+        "Closed": "1573462699415834625"
+      },
+      "labels": {
+        "bug": "1573462699415834626",
+        "documentation": "1573462699415834627",
+        "duplicate": "1573462699415834628",
+        "enhancement": "1573462699415834629",
+        "good first issue": "1573462699415834630",
+        "help wanted": "1573462699415834631",
+        "invalid": "1573462699415834632",
+        "question": "1573462699415834633",
+        "wontfix": "1573462699440996362",
+        "accessibility": "1573462699440996363",
+        "dependencies": "1573462699440996364",
+        "javascript": "1573462699440996365",
+        "github_actions": "1573462699440996366",
+        "internal-merge": "1573462699440996367",
+        "status:accepted": "1573462699440996368",
+        "status:awaiting": "1573462699440996369",
+        "status:duplicate": "1573462699440996370",
+        "status:invalid": "1573462699440996371",
+        "status:planned": "1573462699453452308"
       }
     }
   }
