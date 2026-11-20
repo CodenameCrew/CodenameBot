@@ -6,5 +6,7 @@ export const ctx = {
   state: null,
   client: null,
   rateLimitedUntil: 0,
-  firstPoll: true
+  firstPoll: true,
+  backfill: false,
+  backfilling: false
 }

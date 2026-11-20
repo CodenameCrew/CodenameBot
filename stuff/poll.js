@@ -25,9 +25,22 @@ function prBase(pr) {
     avatar: pr.user.avatar_url,
     link: pr.html_url,
     images: images(pr.body),
-    header: `*${pr.user.login} opened a pull request*\n## \`${ctx.repoName}/${pr.base.ref}\`\n**Pull request #${pr.number}](${pr.html_url})**${status}`,
+    header: `*${pr.user.login} opened a pull request*\n## \`${ctx.repoName}/${pr.base.ref}\`\n**[Pull request #${pr.number}](${pr.html_url})**${status}`,
     blocks: [`**[${pr.title}](${pr.html_url})**${quote(pr.body)}\n-# *${by(pr.user, 'opened', pr.created_at)}*`]
   }
+}
+
+function openPrThread(key, pr) {
+  return openThread(key, prTags[prKind()], `PR #${pr.number} ${pr.title}`, buildCard({
+    user: pr.user,
+    action: 'opened a pull request',
+    heading: `${ctx.repoName}/${pr.base.ref}`,
+    title: `[PR #${pr.number}]: ${pr.title}`,
+    url: pr.html_url,
+    body: pr.body,
+    footer: by(pr.user, 'opened', pr.created_at),
+    color: green
+  }), pr.labels.map(label => label.name))
 }
 
 function prThreadChange(pr, prState) {
@@ -73,6 +86,8 @@ export async function watched() {
 }
 
 async function poll() {
+  ctx.backfilling = ctx.backfill
+  ctx.backfill = false
   for (const name of await watched()) {
     try {
       ctx.repoInfo = await gh(`/repos/${name}`)
@@ -87,6 +102,7 @@ async function poll() {
     }
   }
   ctx.firstPoll = false
+  ctx.backfilling = false
   save()
 }
 
@@ -225,6 +241,7 @@ async function pollRepo() {
     const was = state.prs[pr.number]
     const entry = state.messages[key]
 
+    if (ctx.backfilling && prState === 'open' && !state.threads[key]) await openPrThread(key, pr)
     await syncTags(key, pr.labels.map(label => label.name))
 
     if (was === prState) {
@@ -239,16 +256,7 @@ async function pollRepo() {
     if (was === undefined) {
       if (new Date(pr.created_at) >= since) {
         await post(key, prKind(), pr.head.sha, prBase(pr), prState)
-        await openThread(key, prTags[prKind()], `[PR #${pr.number}] ${pr.title}`, buildCard({
-          user: pr.user,
-          action: 'opened a pull request',
-          heading: `${repoName}/${pr.base.ref}`,
-          title: `Pull request #${pr.number}: ${pr.title}`,
-          url: pr.html_url,
-          body: pr.body,
-          footer: by(pr.user, 'opened', pr.created_at),
-          color: green
-        }), pr.labels.map(label => label.name))
+        await openPrThread(key, pr)
       }
     } else if (entry) {
       entry.base = prBase(pr)
@@ -427,6 +435,7 @@ export async function loop() {
     await poll()
   } catch (err) {
     console.log(`poll failed: ${err.message}`)
+    if (ctx.backfilling) ctx.backfill = true
   }
   setTimeout(loop, Math.max(pollMs, ctx.rateLimitedUntil - Date.now()))
 }

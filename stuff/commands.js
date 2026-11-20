@@ -14,7 +14,7 @@ const kinds = {
 const channelOption = option => option.setName('channel').setDescription('Defaults to this channel').addChannelTypes(ChannelType.GuildText, ChannelType.GuildAnnouncement)
 const typeOption = option => option.setName('type').setDescription('Only this kind of update, defaults to everything not sent elsewhere').addChoices(...Object.entries(kinds).map(([value, name]) => ({ name, value })))
 export const feedCommand = new SlashCommandBuilder().setName('feed').setDescription('Choose where GitHub updates are posted').addSubcommand(sub => sub.setName('add').setDescription('Post GitHub updates in a channel').addChannelOption(channelOption).addStringOption(typeOption)).addSubcommand(sub => sub.setName('remove').setDescription('Stop posting GitHub updates in a channel').addChannelOption(channelOption).addStringOption(typeOption)).addSubcommand(sub => sub.setName('list').setDescription('Show the channels that get GitHub updates'))
-export const setupCommand = new SlashCommandBuilder().setName('setup').setDescription('Create a forum tag for every GitHub label')
+export const setupCommand = new SlashCommandBuilder().setName('setup').setDescription('Create forum tags for GitHub labels and threads for open pull requests')
 
 async function setup() {
   const labels = new Map()
@@ -48,7 +48,8 @@ async function setup() {
     }
   }
   saveConfig()
-  return `Found ${labels.size} label(s).\n${lines.join('\n') || 'No forums in config.json.'}`
+  ctx.backfill = true
+  return `Found ${labels.size} label(s).\n${lines.join('\n') || 'No forums in config.json.'}\nThreads for open pull requests are created on the next poll.`
 }
 
 function feed(interaction) {
