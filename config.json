@@ -1,11 +1,7 @@
 {
-  "repos": [
-    "CodenameCrew"
-  ],
+  "repos": ["CodenameCrew"],
   "excludedRepos": [],
-  "officialRepos": [
-    "CodenameCrew/CodenameEngine"
-  ],
+  "officialRepos": ["CodenameCrew/CodenameEngine"],
   "branch": "",
   "tracked": [
     {
@@ -22,28 +18,35 @@
     }
   ],
   "pollSeconds": 5,
-  "allowedRoles": [
-    "1303428277867647059",
-    "537313120666910720"
-  ],
-  "noCommentGuilds": [
-    "860561967383445535"
-  ],
-  "channels": [
-    "1557383912710217898"
-  ],
+  "allowedRoles": ["1303428277867647059", "537313120666910720"],
+  "noCommentGuilds": ["860561967383445535"],
+  "channels": ["1557383912710217898"],
   "routes": {
-    "commits": [
-      "1356976181035143178"
-    ],
-    "officialPulls": [
-      "1356976181035143178"
-    ],
-    "unofficialPulls": [
-      "1303436224022970438"
-    ],
-    "comments": [
-      "1303436034561937418"
-    ]
+    "commits": ["1356976181035143178"],
+    "officialPulls": ["1356976181035143178"],
+    "unofficialPulls": ["1303436224022970438"],
+    "comments": ["1303436034561937418"]
+  },
+  "forums": {
+    "Engine PR": {
+      "channel": "1572598131982598366",
+      "tags": {
+        "Accepted/Merged": "tagId",
+        "Rejected": "tagId"
+      }
+    },
+    "Library-Fork PR": {
+      "channel": "1572598206305665064",
+      "tags": {
+        "Accepted/Merged": "tagId",
+        "Rejected": "tagId"
+      }
+    },
+    "Issues": {
+      "channel": "1572599245025054720",
+      "tags": {
+        "Closed": "tagId"
+      }
+    }
   }
 }
