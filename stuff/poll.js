@@ -3,7 +3,7 @@ import { ctx } from './ctx.js'
 import { gh } from './github.js'
 import { images, quote, by } from './format.js'
 import { post, update, notify, buildCard } from './messages.js'
-import { openThread, postInThread, closeThread } from './forums.js'
+import { openThread, postInThread, closeThread, syncTags } from './forums.js'
 
 const day = 24 * 60 * 60 * 1000
 const green = 0x238636
@@ -25,7 +25,7 @@ function prBase(pr) {
     avatar: pr.user.avatar_url,
     link: pr.html_url,
     images: images(pr.body),
-    header: `*${pr.user.login} opened a pull request*\n## \`${ctx.repoName}/${pr.base.ref}\`\n**[Pull request #${pr.number}](${pr.html_url})**${status}`,
+    header: `*${pr.user.login} opened a pull request*\n## \`${ctx.repoName}/${pr.base.ref}\`\n**Pull request #${pr.number}](${pr.html_url})**${status}`,
     blocks: [`**[${pr.title}](${pr.html_url})**${quote(pr.body)}\n-# *${by(pr.user, 'opened', pr.created_at)}*`]
   }
 }
@@ -35,7 +35,7 @@ function prThreadChange(pr, prState) {
   const merged = prState === 'merged'
   const payload = buildCard({
     heading: `${ctx.repoName}/${pr.base.ref}`,
-    title: `Pull request #${pr.number} ${prState}`,
+    title: `[PR #${pr.number} ${prState}]`,
     url: pr.html_url,
     color: merged ? purple : red
   })
@@ -53,7 +53,7 @@ function issueThreadChange(issue) {
   return closeThread(`issue-${issue.number}`, payload, 'Closed')
 }
 
-async function watched() {
+export async function watched() {
   const names = []
   for (const entry of repos) {
     if (entry.includes('/')) {
@@ -225,6 +225,8 @@ async function pollRepo() {
     const was = state.prs[pr.number]
     const entry = state.messages[key]
 
+    await syncTags(key, pr.labels.map(label => label.name))
+
     if (was === prState) {
       if (entry && entry.sha !== pr.head.sha) {
         entry.sha = pr.head.sha
@@ -237,7 +239,7 @@ async function pollRepo() {
     if (was === undefined) {
       if (new Date(pr.created_at) >= since) {
         await post(key, prKind(), pr.head.sha, prBase(pr), prState)
-        await openThread(key, prTags[prKind()], `PR #${pr.number} ${pr.title}`, buildCard({
+        await openThread(key, prTags[prKind()], `[PR #${pr.number}] ${pr.title}`, buildCard({
           user: pr.user,
           action: 'opened a pull request',
           heading: `${repoName}/${pr.base.ref}`,
@@ -246,7 +248,7 @@ async function pollRepo() {
           body: pr.body,
           footer: by(pr.user, 'opened', pr.created_at),
           color: green
-        }))
+        }), pr.labels.map(label => label.name))
       }
     } else if (entry) {
       entry.base = prBase(pr)
@@ -269,6 +271,7 @@ async function pollRepo() {
 
   for (const issue of [...issues].reverse()) {
     const was = state.issues[issue.number]
+    await syncTags(`issue-${issue.number}`, issue.labels.map(label => label.name))
     if (was === issue.state) continue
     if (was === undefined && new Date(issue.created_at) >= since) {
       const opened = {
@@ -281,7 +284,7 @@ async function pollRepo() {
         color: green
       }
       await notify(opened)
-      await openThread(`issue-${issue.number}`, 'Issues', `Issue #${issue.number} ${issue.title}`, buildCard(opened))
+      await openThread(`issue-${issue.number}`, 'Issues', `Issue #${issue.number} ${issue.title}`, buildCard(opened), issue.labels.map(label => label.name))
     } else if (was !== undefined) {
       const verb = issue.state === 'closed' ? 'closed' : 'reopened'
       await notify({
